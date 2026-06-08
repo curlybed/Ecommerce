@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ShopVerse — Premium Ecommerce Store. Discover curated products with a stunning shopping experience.">
+    <title>ShopVerse — Premium Ecommerce</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <!-- ========== ANIMATED BACKGROUND ORBS ========== -->
+    <div class="bg-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-brand">⚡ ShopVerse</div>
+        <ul class="navbar-nav" id="nav-links">
+            <!-- Filled by JS based on auth state -->
+        </ul>
+    </nav>
+
+    <!-- ========== TOAST CONTAINER ========== -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="main-content">
+
+        <!-- ===== REGISTER VIEW ===== -->
+        <div class="view active" id="view-register">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h1 class="auth-title">Create Account</h1>
+                    <p class="auth-subtitle">Join ShopVerse and start shopping</p>
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" id="reg-name" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="reg-email" placeholder="john@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input" id="reg-password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btn-register">Create Account</button>
+                    </form>
+                    <div class="auth-link">
+                        Already have an account? <a onclick="showView('login')">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== VERIFY OTP VIEW ===== -->
+        <div class="view" id="view-otp">
+            <div class="auth-container">
+                <div class="auth-card" style="text-align: center;">
+                    <h1 class="auth-title">Verify Email</h1>
+                    <p class="auth-subtitle">Enter the 6-digit OTP sent to <strong id="otp-email-display"></strong></p>
+                    <div class="otp-inputs" id="otp-inputs">
+                        <input type="text" class="otp-input" maxlength="1" data-index="0">
+                        <input type="text" class="otp-input" maxlength="1" data-index="1">
+                        <input type="text" class="otp-input" maxlength="1" data-index="2">
+                        <input type="text" class="otp-input" maxlength="1" data-index="3">
+                        <input type="text" class="otp-input" maxlength="1" data-index="4">
+                        <input type="text" class="otp-input" maxlength="1" data-index="5">
+                    </div>
+                    <button class="btn btn-primary" id="btn-verify-otp">Verify OTP</button>
+                    <div class="auth-link" style="margin-top: 16px;">
+                        Didn't receive? <a onclick="resendOtp()">Resend OTP</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== LOGIN VIEW ===== -->
+        <div class="view" id="view-login">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h1 class="auth-title">Welcome Back</h1>
+                    <p class="auth-subtitle">Sign in to your account</p>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="login-email" placeholder="john@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input" id="login-password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btn-login">Sign In</button>
+                    </form>
+                    <div class="auth-link">
+                        Don't have an account? <a onclick="showView('register')">Sign up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PRODUCTS VIEW ===== -->
+        <div class="view" id="view-products">
+            <div class="products-container">
+                <!-- Hero Banner -->
+                <div class="hero-banner">
+                    <div class="hero-badge">✨ Curated Collection</div>
+                    <h1 class="hero-title">Discover Premium Products</h1>
+                    <p class="hero-subtitle">Explore our handpicked collection of the finest products, delivered to your doorstep</p>
+                </div>
+
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">🛍️ All Products</h2>
+                        <p class="section-subtitle">Browse our collection</p>
+                    </div>
+                </div>
+                <div class="products-grid" id="products-grid">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CART VIEW ===== -->
+        <div class="view" id="view-cart">
+            <div class="cart-container">
+                <div class="section-header">
+                    <div>
+                        <h1 class="section-title">🛒 Your Cart</h1>
+                        <p class="section-subtitle" id="cart-count-label">0 items</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="showView('products')">← Continue Shopping</button>
+                </div>
+                <div id="cart-items">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="site-footer">
+        <div class="footer-brand">⚡ ShopVerse</div>
+        <p>Premium shopping experience — crafted with care</p>
+    </footer>
+
+    <script src="/app.js"></script>
+</body>
+</html>
