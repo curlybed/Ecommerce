@@ -1,5 +1,7 @@
 package com.backend.ecommerce.entities;
 
+import com.backend.ecommerce.enums.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,6 +35,9 @@ public class User {
 
     @Builder.Default
     private boolean emailVerified = false;
+
+    @Builder.Default
+    private Role role = Role.USER;
 
     @Builder.Default
     private List<Address> addresses = new ArrayList<>();

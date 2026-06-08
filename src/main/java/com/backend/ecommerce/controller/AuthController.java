@@ -4,6 +4,7 @@ import com.backend.ecommerce.dtos.VerifyOtpRequest;
 import com.backend.ecommerce.dtos.LoginRequest;
 import com.backend.ecommerce.entities.User;
 import com.backend.ecommerce.dtos.RegisterRequest;
+import com.backend.ecommerce.enums.Role;
 import com.backend.ecommerce.repositories.UserRepository;
 import com.backend.ecommerce.service.EmailService;
 import com.backend.ecommerce.service.OtpService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.validation.Valid;
 import java.util.Map;
@@ -123,7 +125,20 @@ public class AuthController {
                     "message", "Login successful",
                     "userId", user.getUserId(),
                     "name", user.getName(),
-                    "email", user.getEmail()
+                    "email", user.getEmail(),
+                    "role", user.getRole().name()
             ));
+     }
+
+     @PostMapping("/make-admin/{email}")
+     public ResponseEntity<?> makeAdmin(@PathVariable String email) {
+         User user = userRepository.findByEmail(email).orElse(null);
+         if (user == null) {
+             return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                     .body(Map.of("message", "User not found"));
+         }
+         user.setRole(Role.ADMIN);
+         userRepository.save(user);
+         return ResponseEntity.ok(Map.of("message", "User promoted to ADMIN successfully"));
      }
 }

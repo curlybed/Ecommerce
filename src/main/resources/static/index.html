@@ -142,6 +142,46 @@
                 </div>
             </div>
         </div>
+        <!-- ===== ADMIN DASHBOARD VIEW ===== -->
+        <div class="view" id="view-admin">
+            <div class="auth-container" style="max-width: 600px;">
+                <div class="auth-card">
+                    <h1 class="auth-title">Admin Dashboard</h1>
+                    <p class="auth-subtitle">Add new products to the catalog</p>
+                    <form id="admin-add-product-form">
+                        <div class="form-group">
+                            <label class="form-label">Product Name</label>
+                            <input type="text" class="form-input" id="admin-prod-name" placeholder="e.g. Wireless Headphones" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <input type="text" class="form-input" id="admin-prod-desc" placeholder="Product details..." required>
+                        </div>
+                        <div style="display: flex; gap: 16px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Price (₹)</label>
+                                <input type="number" class="form-input" id="admin-prod-price" placeholder="999" required min="0">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Stock Quantity</label>
+                                <input type="number" class="form-input" id="admin-prod-qty" placeholder="50" required min="0">
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 16px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Manufacturer</label>
+                                <input type="text" class="form-input" id="admin-prod-mfg" placeholder="Brand Name" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Category ID</label>
+                                <input type="text" class="form-input" id="admin-prod-cat" placeholder="cat_123" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btn-admin-add">Add Product</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
     </main>
 

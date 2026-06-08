@@ -31,6 +31,7 @@ function updateNav() {
     if (currentUser) {
         nav.innerHTML = `
             <li><button class="nav-link active" onclick="showView('products')">Products</button></li>
+            ${currentUser.role === 'ADMIN' ? `<li><button class="nav-link" onclick="showView('admin')">Admin</button></li>` : ''}
             <li class="nav-cart">
                 <button class="nav-link" onclick="showView('cart')">🛒 Cart
                     ${cart.length > 0 ? `<span class="cart-badge">${cart.length}</span>` : ''}
@@ -198,7 +199,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         const data = await apiCall('/api/auth/login', 'POST', { email, password });
 
         // Store user info (no token)
-        currentUser = { userId: data.userId, name: data.name, email: data.email };
+        currentUser = { userId: data.userId, name: data.name, email: data.email, role: data.role };
         localStorage.setItem('user', JSON.stringify(currentUser));
 
         // Load cart from localStorage
@@ -469,3 +470,52 @@ async function checkout() {
     }
     updateNav();
 })();
+
+// ============================================
+//  ADMIN DASHBOARD
+// ============================================
+
+const adminForm = document.getElementById('admin-add-product-form');
+if (adminForm) {
+    adminForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentUser || currentUser.role !== 'ADMIN') return;
+
+        const btn = document.getElementById('btn-admin-add');
+        const product = {
+            name: document.getElementById('admin-prod-name').value,
+            description: document.getElementById('admin-prod-desc').value,
+            price: parseFloat(document.getElementById('admin-prod-price').value),
+            stockQuantity: parseInt(document.getElementById('admin-prod-qty').value),
+            manufacturer: document.getElementById('admin-prod-mfg').value,
+            categoryId: document.getElementById('admin-prod-cat').value
+        };
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Adding...';
+
+        try {
+            const response = await fetch('/product/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-User-Id': currentUser.userId
+                },
+                body: JSON.stringify(product)
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.message || 'Failed to add product');
+            }
+
+            showToast('Product added successfully!', 'success');
+            adminForm.reset();
+        } catch (err) {
+            showToast(err.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Add Product';
+        }
+    });
+}
