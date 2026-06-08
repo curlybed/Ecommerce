@@ -1,5 +1,5 @@
 // ============================================
-//  ShopVerse — Frontend App
+//  Ecommerce — Frontend App
 //  (No JWT token — session via localStorage)
 // ============================================
 
@@ -409,7 +409,7 @@ async function checkout() {
             key: paymentResp.razorpayKeyId || '',
             amount: total * 100,
             currency: 'INR',
-            name: 'ShopVerse',
+            name: 'Ecommerce',
             description: `Order #${order.orderId}`,
             order_id: paymentResp.razorpayOrderId,
             handler: async function (response) {
