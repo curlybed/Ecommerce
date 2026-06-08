@@ -21,6 +21,7 @@ function showView(viewName) {
 
     if (viewName === 'products') loadProducts();
     if (viewName === 'cart') renderCart();
+    if (viewName === 'admin') loadPendingUsers();
 
     updateNav();
 }
@@ -519,4 +520,54 @@ if (adminForm) {
             btn.textContent = 'Add Product';
         }
     });
+}
+
+async function loadPendingUsers() {
+    if (!currentUser || currentUser.role !== 'ADMIN') return;
+    const container = document.getElementById('admin-pending-users');
+    if (!container) return;
+
+    container.innerHTML = '<span class="spinner"></span> Loading pending users...';
+    try {
+        const response = await fetch('/admin/pending-users', {
+            headers: { 'X-User-Id': currentUser.userId }
+        });
+        if (!response.ok) throw new Error('Failed to fetch pending users');
+        const users = await response.json();
+
+        if (users.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-secondary);">No pending approvals.</p>';
+            return;
+        }
+
+        container.innerHTML = users.map(u => `
+            <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: 500;">${u.name}</div>
+                    <div style="font-size: 0.9em; color: var(--text-secondary);">${u.email} — Requested: ${u.role}</div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="approveUser('${u.userId}')">Approve</button>
+            </div>
+        `).join('');
+
+    } catch (err) {
+        container.innerHTML = `<p style="color: #ff4e4e;">${err.message}</p>`;
+    }
+}
+
+async function approveUser(userId) {
+    try {
+        const response = await fetch('/admin/approve/' + userId, {
+            method: 'POST',
+            headers: { 'X-User-Id': currentUser.userId }
+        });
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.message || 'Failed to approve user');
+        }
+        showToast('User approved successfully!', 'success');
+        loadPendingUsers();
+    } catch (err) {
+        showToast(err.message, 'error');
+    }
 }

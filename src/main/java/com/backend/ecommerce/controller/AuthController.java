@@ -60,6 +60,7 @@ public class AuthController {
                .password(passwordEncoder.encode(registerRequest.getPassword()))
                .name(registerRequest.getName())
                .role(userRole)
+               .isApproved(userRole == Role.USER)
                .emailVerified(false)
                .build();
 
@@ -121,6 +122,10 @@ public class AuthController {
             if(!user.isEmailVerified()){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(Map.of("message", "verify the Email"));
+            }
+            if(!user.isApproved()){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("message", "Account pending Admin approval"));
             }
             if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

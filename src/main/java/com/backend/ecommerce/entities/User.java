@@ -40,6 +40,9 @@ public class User {
     private Role role = Role.USER;
 
     @Builder.Default
+    private boolean isApproved = true;
+
+    @Builder.Default
     private List<Address> addresses = new ArrayList<>();
 
     @DBRef
