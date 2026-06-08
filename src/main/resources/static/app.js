@@ -111,12 +111,13 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     const name = document.getElementById('reg-name').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value;
+    const role = document.getElementById('reg-role').value;
 
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span> Registering...';
 
     try {
-        await apiCall('/api/auth/register', 'POST', { name, email, password });
+        await apiCall('/api/auth/register', 'POST', { name, email, password, role });
         pendingEmail = email;
         document.getElementById('otp-email-display').textContent = email;
         showToast('OTP sent to your email!', 'success');

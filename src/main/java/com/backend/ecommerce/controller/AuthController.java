@@ -50,10 +50,16 @@ public class AuthController {
 
        existing.ifPresent(userRepository::delete);
 
+       Role userRole = Role.USER;
+       if (registerRequest.getRole() != null && registerRequest.getRole().equalsIgnoreCase("ADMIN")) {
+           userRole = Role.ADMIN;
+       }
+
        User user = User.builder()
                .email(registerRequest.getEmail())
                .password(passwordEncoder.encode(registerRequest.getPassword()))
                .name(registerRequest.getName())
+               .role(userRole)
                .emailVerified(false)
                .build();
 
